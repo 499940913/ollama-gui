@@ -103,9 +103,8 @@ Models will get downloaded inside the folder `./ollama_data` in the repository. 
 - [x] Chat history with IndexedDB
 - [x] Markdown message formatting
 - [x] Code cleanup and organization
-- [ ] Model library browser and installer
-- [ ] Mobile-responsive design
-- [ ] File uploads with OCR support
+- [x] Model library browser and installer
+- [x] File uploads with OCR support
 
 ## 🛠️ Tech Stack
 
