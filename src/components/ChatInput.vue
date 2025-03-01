@@ -4,10 +4,11 @@ import { useTextareaAutosize } from '@vueuse/core'
 import { useChats } from '../services/chat.ts'
 import { IconPlayerStopFilled, IconSend, IconWhirl, IconCameraUp } from '@tabler/icons-vue'
 import testConnection from '../services/testConnection.ts'
-
+import { showSystem } from '../services/appConfig.ts'
 const { textarea, input: userInput } = useTextareaAutosize({ input: '' })
-const { addUserMessage, abort, hasActiveChat } = useChats()
+const { addSystemMessage, addUserMessage, abort, hasActiveChat, hasMessages, regenerateResponse } = useChats()
 
+const isSystemMessage = ref(false)
 const isInputValid = computed<boolean>(() => !!userInput.value.trim())
 const isAiResponding = ref(false)
 const flag = ref(true)
@@ -36,13 +37,19 @@ const onSubmit = () => {
     return
   }
   if (isInputValid.value) {
-    addUserMessage(userInput.value.trim(), base64Images.value).then(() => {
+    if (isSystemMessage.value) {
+      addSystemMessage(userInput.value.trim())
+    } else {
+   addUserMessage(userInput.value.trim(), base64Images.value).then(() => {
       isAiResponding.value = false
     })
+    }
     userInput.value = ''
-    base64Images.value = []
+    if (!isSystemMessage.value) {
+      isAiResponding.value = true
+    }
+ 	base64Images.value = []
     selectedFile.value = null
-    isAiResponding.value = true
   }
 }
 
@@ -78,7 +85,28 @@ const handleCompositionEnd = () => {
 </script>
 
 <template>
-  <form class="mt-2" @submit.prevent="onSubmit">
+  <form @submit.prevent="onSubmit">
+    <div class="flex px-2 flex-col sm:flex-row items-center">
+      <div class="text-gray-900 dark:text-gray-100 space-x-2 text-sm font-medium mb-2" v-if="showSystem">
+        <label>
+          <input type="radio" :value="false" v-model="isSystemMessage">
+          User
+        </label>
+        <label>
+          <input type="radio" :value="true" v-model="isSystemMessage">
+          System
+        </label>
+      </div>
+      <div class="ml-auto" v-if="hasMessages">
+        <button
+          type="button"
+          @click="regenerateResponse"
+          class="rounded-lg text-blue-700 text-sm font-medium transition duration-200 ease-in-out hover:text-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:text-gray-400 disabled:opacity-50 dark:text-blue-500 dark:hover:text-blue-400 dark:focus:ring-blue-800 dark:disabled:text-gray-600"
+        >
+          Regenerate response
+        </button>
+      </div>
+    </div>
     <div class="relative">
       <textarea
         :disabled="!isConnected"

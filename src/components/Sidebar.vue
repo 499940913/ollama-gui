@@ -19,7 +19,7 @@ import { useChats } from '../services/chat.ts'
 import { onMounted, ref } from 'vue'
 import testConnection from '../services/testConnection.ts'
 
-const { sortedChats, activeChat, switchChat, deleteChat, startNewChat, wipeDatabase } =
+const { sortedChats, activeChat, switchChat, deleteChat, startNewChat } =
   useChats()
 
 const onNewChat = () => {
@@ -42,6 +42,8 @@ const onSwitchChat = (chatId: number) => {
 const checkSystemPromptPanel = () => {
   isSystemPromptOpen.value = false
 }
+
+const lang = navigator.language
 </script>
 
 <template>
@@ -70,7 +72,7 @@ const checkSystemPromptPanel = () => {
           :class="{
             'bg-gray-100 dark:bg-gray-800': activeChat?.id == chat.id,
           }"
-          class="flex w-full flex-col gap-y-1 rounded-md px-3 py-2 text-left transition-colors duration-100 ease-in-out hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-300 dark:hover:bg-gray-700 dark:focus:ring-blue-500"
+          class="flex w-full flex-col gap-y-1 rounded-md px-3 py-2 text-left transition-colors duration-100 ease-in-out hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-100 dark:placeholder-gray-300 dark:hover:bg-gray-700 dark:focus:ring-blue-500"
         >
           <span class="text-sm font-medium leading-none text-gray-900 dark:text-gray-100">
             {{ chat.name }}
@@ -80,7 +82,7 @@ const checkSystemPromptPanel = () => {
           </span>
           <span class="text-xs leading-none text-gray-700 dark:text-gray-300">
             {{
-              chat.createdAt.toLocaleDateString('no', {
+              chat.createdAt.toLocaleDateString(lang, {
                 day: '2-digit',
                 month: 'short',
                 weekday: 'long',
@@ -102,14 +104,6 @@ const checkSystemPromptPanel = () => {
           <IconMoon v-else class="size-4 opacity-50 group-hover:opacity-80" />
 
           Toggle dark mode
-        </button>
-        <button
-          @click="wipeDatabase"
-          class="group flex w-full items-center gap-x-2 rounded-md px-3 py-2 text-left text-sm font-medium text-gray-900 transition-colors duration-100 ease-in-out hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-300 dark:hover:bg-gray-700 dark:focus:ring-blue-500"
-        >
-          <IconTrashX class="size-4 opacity-50 group-hover:opacity-80" />
-
-          Delete chats
         </button>
         <button
           v-if="false"

@@ -27,9 +27,9 @@ const handleModelChange = (event: Event) => {
   switchModel(wip.value)
 }
 type Props = {
-  disabled: boolean
+  disabled?: boolean
 }
-const { disabled } = defineProps<Props>()
+const { disabled = false } = defineProps<Props>()
 onMounted(async ()=>{
   if(!await testConnection()){
     isConnected.value = false
