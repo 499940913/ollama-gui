@@ -26,6 +26,11 @@ const { sortedChats, activeChat, switchChat, deleteChat, startNewChat, wipeDatab
 
 const showConfirmDeleteAllChats = ref(false)
 
+const showConfirmDeleteChat = ref({
+  show:false,
+  id:-1
+})
+
 const onNewChat = () => {
   checkSystemPromptPanel()
   return startNewChat('New chat')
@@ -85,6 +90,14 @@ const onConfirmDeleteAllChats = () => {
   showConfirmDeleteAllChats.value = false
 }
 
+const onConfirmDeleteChat = () => {
+   if(showConfirmDeleteChat.value.id!==-1)
+   {
+    deleteChat(showConfirmDeleteChat.value.id);
+   }
+  showConfirmDeleteChat.value.show = false
+}
+
 
 
 </script>
@@ -93,6 +106,11 @@ const onConfirmDeleteAllChats = () => {
   <Confirm v-model="showConfirmDeleteAllChats" title="Delete all chats"
     message="Are you sure you want to proceed with this action? This cannot be undone."
     @confirm="onConfirmDeleteAllChats" @cancel="showConfirmDeleteAllChats = false" />
+
+    <Confirm v-model="showConfirmDeleteChat.show" title="Delete chat"
+    message="Are you sure you want to proceed with this action? This cannot be undone."
+    @confirm="onConfirmDeleteChat" @cancel="showConfirmDeleteChat.show = false" />
+
   <aside class="flex">
     <div
       class="flex h-screen w-60 flex-col overflow-y-auto border-r border-gray-200 bg-white pt-2 dark:border-gray-800 dark:bg-gray-900 sm:h-screen sm:w-64">
@@ -142,7 +160,7 @@ const onConfirmDeleteAllChats = () => {
           border-radius: 4px;
           box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
           z-index: 1001;">
-                  <button @click="showConfirmDeleteAllChats = true"
+                  <button @click="{showConfirmDeleteChat.show  = true;showConfirmDeleteChat.id=chat.id?chat.id:-1}"
                     class="group flex w-full items-center gap-x-2 rounded-md px-3 py-2 text-left text-sm font-medium text-gray-900 transition-colors duration-100 ease-in-out hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-300 dark:hover:bg-gray-700 dark:focus:ring-blue-500">
                     <IconTrashX class="size-4 opacity-50 group-hover:opacity-80" />
                     Delete chat
