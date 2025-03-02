@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import {
   IconMoon,
   IconPlus,
@@ -20,10 +19,11 @@ import { useChats } from '../services/chat.ts'
 import { onMounted, ref } from 'vue'
 import testConnection from '../services/testConnection.ts'
 import Confirm from './Dialogs/Confirm.vue';
-const { sortedChats, activeChat, switchChat, deleteChat, startNewChat } =
+ 
+const { sortedChats, activeChat, switchChat, deleteChat, startNewChat, wipeDatabase} =
   useChats()
 
-const showConfirmDeleteAllChats = ref(false)
+  const showConfirmDeleteAllChats = ref(false)
 
 const onNewChat = () => {
   checkSystemPromptPanel()
@@ -47,13 +47,16 @@ const checkSystemPromptPanel = () => {
 }
 
 const lang = navigator.language
+
 const onConfirmDeleteAllChats = () => {
   wipeDatabase()
   showConfirmDeleteAllChats.value = false
-}</script>
+}
+
+</script>
 
 <template>
-  <Confirm 
+    <Confirm 
     v-model="showConfirmDeleteAllChats"
     title="Delete all chats" 
     message="Are you sure you want to proceed with this action? This cannot be undone."
@@ -119,14 +122,6 @@ const onConfirmDeleteAllChats = () => {
           Toggle dark mode
         </button>
         <button
-    <button
-          @click="showConfirmDeleteAllChats = true"
-          class="flex w-full gap-x-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-zinc-700 transition-colors duration-200 hover:bg-zinc-200 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-zinc-200 dark:placeholder-zinc-400 dark:hover:bg-zinc-800 dark:focus:ring-blue-500"
-        >
-          <IconTrashX class="h-6 w-6" />
-
-          Delete chats
-        </button>
           v-if="false"
           class="group flex w-full items-center gap-x-2 rounded-md px-3 py-2 text-left text-sm font-medium text-gray-900 transition-colors duration-100 ease-in-out hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-300 dark:hover:bg-gray-700 dark:focus:ring-blue-500"
         >
@@ -140,6 +135,14 @@ const onConfirmDeleteAllChats = () => {
           <IconMessageCode class="size-4 opacity-50 group-hover:opacity-80" />
 
           System prompt
+        </button>
+        <button
+          @click="showConfirmDeleteAllChats = true"
+          class="group flex w-full items-center gap-x-2 rounded-md px-3 py-2 text-left text-sm font-medium text-gray-900 transition-colors duration-100 ease-in-out hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-300 dark:hover:bg-gray-700 dark:focus:ring-blue-500"
+        >
+        <IconTrashX class="size-4 opacity-50 group-hover:opacity-80" />
+
+          Delete chats
         </button>
         <button
           @click="toggleSettingsPanel"
