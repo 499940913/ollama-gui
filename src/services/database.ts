@@ -15,6 +15,7 @@ export interface Chat {
   name: string
   model: string
   createdAt: Date
+  showMore:Boolean
 }
 
 export interface Message {

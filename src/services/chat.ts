@@ -135,6 +135,7 @@ export function useChats() {
       name,
       model: currentModel.value,
       createdAt: new Date(),
+      showMore:false
     }
 
     try {
