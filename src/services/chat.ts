@@ -347,6 +347,7 @@ export function useChats() {
         name: chatData?.name,
         model: chatData?.model,
         createdAt: new Date(chatData?.createdAt || chatData.messages[0].createdAt),
+        showMore:false
       }
       chat.id = await dbLayer.addChat(chat)
       chats.value.push(chat)

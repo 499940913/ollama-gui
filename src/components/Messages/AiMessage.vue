@@ -9,38 +9,25 @@ import Markdown from '../Markdown.vue'
 type Props = {
   message: Message
 }
-const startTime = ref<number | null>(null)
-const duration = ref(0)
-const isThinking = ref<Boolean | null>(false)
-const thinkContent = ref('')
-const finalContent = ref('')
+
 const { message } = defineProps<Props>()
 const thought = computed(() => {
-  if (isThinking.value !== true) {
-    const begin = message.content.indexOf('<think>')
-    if (begin != -1) {
-      isThinking.value = true;
-      startTime.value = Date.now()
-    }
+  const end = message.content.indexOf('</think>')
+  if (end != -1) {
+    return [
+      false,
+      message.content.substring('<think>'.length, end),
+      message.content.substring(end + '</think>'.length),
+    ]
+  } 
+  else if(message.content.indexOf('<think>')>-1) {
+    return [
+      true,
+      message.content.substring('<think>'.length),
+      null,
+    ]
   }
-  if (isThinking.value) {
-    const end = message.content.indexOf('</think>')
-    if (end != -1) {
-      isThinking.value = false;
-      return [
-        message.content.substring('<think>'.length, end),
-        message.content.substring(end + '</think>'.length),
-      ]
-    } else {
-      return [
-        message.content.substring('<think>'.length),
-        null,
-      ]
-    }
-  }
-  else {
-    return [null, message.content]
-  }
+  return [false,null, message.content]
 })
 </script>
 
@@ -53,18 +40,16 @@ const thought = computed(() => {
       <code v-if="!enableMarkdown" class="whitespace-pre-line">{{ message.content }}</code>
       <div v-else
         class="prose prose-base max-w-full dark:prose-invert prose-headings:font-semibold prose-h1:text-lg prose-h2:text-base prose-h3:text-base prose-p:first:mt-0 prose-a:text-blue-600 prose-code:text-sm prose-code:text-gray-100 prose-pre:p-2 dark:prose-code:text-gray-100">
-        <details v-if="thought[0]" open
+        <details v-if="thought[1]" open
           class="whitespace-pre-wrap rounded-md mb-4 border border-blue-200 bg-blue-50 p-4 text-sm leading-tight text-blue-900 dark:border-blue-700 dark:bg-blue-800 dark:text-blue-50">
-          <summary>Thought</summary>
+          <summary>{{ thought[0] ? "Thinking..." : `Thought` }}</summary>
           <div>
-            <Markdown :source="thought[0]" v-if="thought[0]" />
-
-            <img v-if="isThinking"
-              style="left: 50%; width: 40px; height: 40px;margin-top: -20px; display: inline-block;" :src="loadsvg"
-              alt="loading">
+            <Markdown :source="thought[1]" v-if="thought[1]" />
+            <img v-if="thought[0]" style="width: 40px; height: 40px;margin-top: -20px; display: inline-block;"
+              :src="loadsvg" alt="loading">
           </div>
         </details>
-        <Markdown :source="thought[1]" v-if="thought[1]" />
+        <Markdown :source="thought[2]" v-if="thought[2]" />
       </div>
     </div>
   </div>
