@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Message } from '../../services/database.ts'
-import { avatarUrl, debugMode,enableMarkdown,defaultAvatarURL } from '../../services/appConfig.ts'
+import { avatarUrl,enableMarkdown,defaultAvatarURL } from '../../services/appConfig.ts'
 type Props = {
   message: Message
 }

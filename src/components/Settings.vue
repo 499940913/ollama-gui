@@ -51,7 +51,6 @@ const confirmWipe = () => {
         </div>
     <DownloadModel/>
       <ModelDeletion/>
-        <ToggleInput label="Enable debug mode" v-model="debugMode" />
         <TextInput id="base-url" label="Base URL" v-model="baseUrl" />
         <TextInput id="gravatar-email" label="Gravatar Email" v-model="gravatarEmail" />
 

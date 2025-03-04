@@ -357,6 +357,7 @@ export function useChats() {
           role: messageData.role,
           content: messageData.content,
           createdAt: new Date(messageData.createdAt),
+          images: []
         }
         await dbLayer.addMessage(message)
       })
