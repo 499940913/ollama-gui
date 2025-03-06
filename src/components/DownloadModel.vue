@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import TextInput from './Inputs/TextInput.vue'
 import { useAI } from '../services/useAI'
-
+import { getApiUrl } from '../services/api'
 const modelName = ref('')
 const downloadProgress = ref(0)
 const isDownloading = ref(false)
@@ -21,7 +21,7 @@ async function downloadModel() {
   abortController.value = new AbortController()
 
   try {
-    const response = await fetch(`http://localhost:11434/api/pull`, {
+    const response = await fetch(getApiUrl('/pull'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

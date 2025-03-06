@@ -1,6 +1,7 @@
+import { getApiUrl } from '../services/api'
 const testConnection = async (): Promise<boolean> => {
   try {
-    const response = await fetch("http://localhost:11434/");
+    const response = await fetch(getApiUrl("/tags"));
     return response.ok;
   } catch (error) {
     console.error("Connection failed:", error);

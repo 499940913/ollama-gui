@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useAI } from '../services/useAI';
-
+import { getApiUrl } from '../services/api'
 const { refreshModels, availableModels } = useAI();
 const selectedModel = ref<string>(''); // Holds the selected model name
 
@@ -18,7 +18,7 @@ const deleteModel = async () => {
   }
 
   try {
-    const response = await fetch('http://localhost:11434/api/delete', {
+    const response = await fetch(getApiUrl('delete'), {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
